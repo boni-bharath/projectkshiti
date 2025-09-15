@@ -1,0 +1,316 @@
+header{
+    height: 90px;
+    width: 100px;
+    background-color: rgb(9,11,26);
+}
+body{
+    margin: 0px;
+}
+.primary-navbar{
+    height: 90px;
+    width: 100%;
+    background-color:  rgb(9,11,26);
+}
+.d-flex{
+    display: flex;
+}
+.allign-items-center{
+    align-items: center;
+}
+.justify-content-bet{
+    justify-content: space-between;
+}
+.justify-content-eve{
+    justify-content: space-evenly;
+}
+.vik img {
+    color: beige;
+    margin: 0px;
+    padding: 0px;
+    margin-left: -12px;
+    
+
+}
+.lear p{
+    color: rgb(248, 251, 251);
+    font-size: larger;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.butt{
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+.sign{
+    background-color: rgb(246, 195, 68);
+    padding: 0px 0px;
+    width: 80px;
+    height: 38px;
+    text-align: center;
+}
+.sign h5{
+    color: rgb(35, 34, 34);
+    padding: 0px;
+    margin: 0px;
+    font-size: medium;
+    font-style: italic;
+
+    
+    
+}
+.text{
+    text-align: center;
+}
+.just{
+    justify-content: space-evenly;
+}
+.main-content img{
+    width: 100%;
+    height: 500px;
+}
+
+
+.glitch img {
+  width: 100%;
+  height: 500px;
+  animation: glitch 8s infinite ;
+}
+
+.glitch::before,
+.glitch::after {
+  content: "";
+  background: url("screenshot.png");
+  background-size: cover;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 500px;
+  mix-blend-mode: screen;
+  opacity: 0.9;
+}
+
+.glitch::before {
+  left: 20px;
+  animation: glitchTop 6s infinite;
+}
+
+.glitch::after {
+  left: -2px;
+  animation: glitchBottom 3s infinite;
+}
+
+@keyframes glitch {
+  0% { transform: none; }
+  20% { transform: skew(0.5deg); }
+  40% { transform: skew(-0.5deg); }
+  60% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+  100% { transform: none; }
+}
+
+@keyframes glitchTop {
+  0% { clip-path: inset(0 0 80% 0); }
+  50% { clip-path: inset(0 0 40% 0); transform: translate(-5px, -2px); }
+  100% { clip-path: inset(0 0 80% 0); }
+}
+
+@keyframes glitchBottom {
+  0% { clip-path: inset(80% 0 0 0); }
+  50% { clip-path: inset(40% 0 0 0); transform: translate(5px, 2px); }
+  100% { clip-path: inset(80% 0 0 0); }
+}
+
+
+
+.box{
+    height: 190px;
+    width: 24%;
+    border: black;
+    margin-top: 100px;
+    padding: 5px;
+    padding-left: 5px;
+    margin-left: 15px;
+    background-color: rgb(233, 241, 223);
+    border-radius: 15px;
+    padding: 10px;
+    animation: vibrate 0.35s ;
+    linear infinite;
+    will-change: transform;
+
+}
+.box img{
+    height: 5px;
+    margin-bottom: 5px;
+}
+.box p{
+    font-size: large;
+    padding-top: -10px;
+    font-family :'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.bloo img{
+    height: 30px;
+    width: 50px;
+
+}
+.box h3{
+    margin-top: -8px;
+}
+.mgp{
+    margin-bottom: 0px;
+}
+.bg{
+    background-color:  rgb(9,11,26) ;
+    height: 800px;
+    margin-top: -3px;
+}
+@keyframes vibrate {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0);}
+}
+.box {
+  
+  transition: transform 0.2s ease;
+}
+
+.box:hover {
+    animation: vibrate 0.85s linear infinite ;
+    will-change: transform;
+}
+
+
+.d-flex.just .box:nth-child(1) { animation-delay: 0s;}
+.d-flex.just .box:nth-child(2) { animation-delay: 0.12s;}
+.d-flex.just .box:nth-child(3) { animation-delay: 0.24s;}
+@media (prefers-reduced-motion: reduce){
+  .box {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto;
+  }
+}
+
+
+.robot img{
+    height: 130px;
+    width: 100px;
+    padding: 10px;
+    margin-left: 300px;
+    animation-play-state: running;
+    
+    
+}
+.kshiti{
+    background-color: white;
+    width: 500px;
+    height: 80px;
+    border-radius: 10px;
+
+}
+.robot {
+  position: relative;  /* required for movement */
+  animation: moveRight 5s ease-in-out forwards;
+}
+
+@keyframes moveRight {
+  from { transform: translateX(-200px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+
+
+
+
+
+
+.textt h4{
+    color: green;
+    padding: 1px 8px;
+    margin-top: -5px;
+    
+   
+}
+.zig{
+    margin-top: -60px;
+}
+.textt h3{
+    color: rgb(187, 126, 21);
+    margin: 0px;
+    padding : 10px;
+    
+   
+}
+.mbo{
+    margin-bottom: 20px;
+}
+.boxone{
+    background-color: rgb(233, 241, 223);
+    width: 40%;
+    height: 300px;
+    padding: auto;
+    margin: auto;
+    margin-top: 50px;
+    border-radius: 10px;
+}
+.boxone img{
+    width: 75px;
+    height: 60px;
+    padding: 4px;
+}
+boxone h2{
+    color: black;
+    padding: 5px;
+    margin-top: -4px;
+}
+.geetha{
+    height: 2px;
+    width: 260px;
+    background-color: rgb(79, 79, 232);
+    margin-left: 3px;
+    margin-top: -10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+@keyframes vibrate {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0);}
+}
+.boxone {
+  
+  transition: transform 0.2s ease;
+}
+
+.boxone:hover {
+    animation: vibrate 0.85s linear infinite ;
+    will-change: transform;
+}
+
+
+.d-flex.just .box:nth-child(1) { animation-delay: 0s;}
+.d-flex.just .box:nth-child(2) { animation-delay: 0.12s;}
+.d-flex.just .box:nth-child(3) { animation-delay: 0.24s;}
+@media (prefers-reduced-motion: reduce){
+  .box {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto;
+    
+  }
+}

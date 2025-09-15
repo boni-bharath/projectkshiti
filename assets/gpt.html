@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kshiti Project</title>
+
+  <style>
+    header{
+        height: 90px;
+        width: 100px;
+        background-color: rgb(9,11,26);
+    }
+    body{
+        margin: 0px;
+    }
+    .primary-navbar{
+        height: 90px;
+        width: 100%;
+        background-color:  rgb(9,11,26);
+    }
+    .d-flex{
+        display: flex;
+    }
+    .allign-items-center{
+        align-items: center;
+    }
+    .justify-content-bet{
+        justify-content: space-between;
+    }
+    .justify-content-eve{
+        justify-content: space-evenly;
+    }
+    .vik img {
+        color: beige;
+        margin: 0px;
+        padding: 0px;
+        margin-left: -12px;
+    }
+    .lear p{
+        color: rgb(248, 251, 251);
+        font-size: larger;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    .butt{
+        background-color: transparent;
+        border: none;
+        outline: none;
+    }
+    .sign{
+        background-color: rgb(246, 195, 68);
+        padding: 0px 0px;
+        width: 80px;
+        height: 38px;
+        text-align: center;
+    }
+    .sign h5{
+        color: rgb(35, 34, 34);
+        padding: 0px;
+        margin: 0px;
+        font-size: medium;
+        font-style: italic;
+    }
+    .text{
+        text-align: center;
+    }
+    .just{
+        justify-content: space-evenly;
+    }
+    .main-content img{
+        width: 100%;
+        height: 500px;
+    }
+
+    .glitch img {
+      width: 100%;
+      height: 500px;
+      animation: glitch 8s infinite ;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: "";
+      background: url("screenshot.png");
+      background-size: cover;
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 500px;
+      mix-blend-mode: screen;
+      opacity: 0.9;
+    }
+
+    .glitch::before {
+      left: 20px;
+      animation: glitchTop 6s infinite;
+    }
+
+    .glitch::after {
+      left: -2px;
+      animation: glitchBottom 3s infinite;
+    }
+
+    @keyframes glitch {
+      0% { transform: none; }
+      20% { transform: skew(0.5deg); }
+      40% { transform: skew(-0.5deg); }
+      60% { transform: translateX(-2px); }
+      80% { transform: translateX(2px); }
+      100% { transform: none; }
+    }
+
+    @keyframes glitchTop {
+      0% { clip-path: inset(0 0 80% 0); }
+      50% { clip-path: inset(0 0 40% 0); transform: translate(-5px, -2px); }
+      100% { clip-path: inset(0 0 80% 0); }
+    }
+
+    @keyframes glitchBottom {
+      0% { clip-path: inset(80% 0 0 0); }
+      50% { clip-path: inset(40% 0 0 0); transform: translate(5px, 2px); }
+      100% { clip-path: inset(80% 0 0 0); }
+    }
+
+    .box{
+        height: 190px;
+        width: 24%;
+        margin-top: 100px;
+        margin-left: 15px;
+        background-color: rgb(233, 241, 223);
+        border-radius: 15px;
+        padding: 10px;
+        transition: transform 0.2s ease;
+    }
+    .box img{
+        height: 5px;
+        margin-bottom: 5px;
+    }
+    .box p{
+        font-size: large;
+        font-family :'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    .bloo img{
+        height: 30px;
+        width: 50px;
+    }
+    .box h3{
+        margin-top: -8px;
+    }
+
+    .bg{
+        background-color:  rgb(9,11,26) ;
+        height: 800px;
+        margin-top: -3px;
+    }
+    .box:hover {
+        animation: vibrate 0.85s linear infinite ;
+        will-change: transform;
+    }
+    @keyframes vibrate {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+      100% { transform: translate(0);}
+    }
+
+    .robot img{
+        height: 130px;
+        width: 100px;
+        padding: 10px;
+        margin-left: 300px;
+    }
+    .kshiti{
+        background-color: white;
+        width: 500px;
+        height: 80px;
+        border-radius: 10px;
+    }
+    .robot {
+      position: relative;
+      animation: moveRight 5s ease-in-out forwards;
+    }
+    @keyframes moveRight {
+      from { transform: translateX(-200px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .textt h4{
+        color: green;
+        padding: 1px 8px;
+        margin-top: -5px;
+    }
+    .zig{
+        margin-top: -60px;
+    }
+    .textt h3{
+        color: rgb(187, 126, 21);
+        margin: 0px;
+        padding : 10px;
+    }
+    .mbo{
+        margin-bottom: 20px;
+    }
+    .boxone{
+        background-color: rgb(233, 241, 223);
+        width: 40%;
+        height: 300px;
+        margin: auto;
+        margin-top: 50px;
+        border-radius: 10px;
+        transition: transform 0.2s ease;
+    }
+    .boxone img{
+        width: 75px;
+        height: 60px;
+        padding: 4px;
+    }
+    .boxone:hover {
+        animation: vibrate 0.85s linear infinite ;
+        will-change: transform;
+    }
+    .geetha{
+        height: 2px;
+        width: 260px;
+        background-color: rgb(79, 79, 232);
+        margin-left: 3px;
+        margin-top: -10px;
+    }
+    .secondary-navbar {
+        height: 60px;
+        background: rgb(9, 11, 26);
+        margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+    <script src="./al.js" ></script>
+    
+    <!-- starts here bro's-->
+    <div class="primary-navbar d-flex allign-items-center justify-content-bet just">
+        <div class="d-flex allign-items-center">
+            <img height="100px" src="c:\Users\bhara\Downloads\pixel-removebg-preview.png">
+            <div class="vik">
+                <img src="./css/ksh.png">
+            </div>
+        </div>
+        <div><a  class="" style="color:white; text-decoration: none;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;font-size: large;" href="../projectkshiti-main/game.html"> >Level Up</a></div>
+        <div onclick="openPracticeModal()" class="lear"><p>Practice</p></div>
+        <div class="lear"><p>Solve</p></div>
+        <button class="butt"><img height="26px" src="./css/searchh.png"></button>
+        <button onclick="openModal()" class="sign allign-items-center text"><h5>sign up</h5></button>
+    </div>
+
+    <div class="main-content">
+        <div class="glitch"><img src="./css/balu.jpg"></div>
+        <div class="bg">
+            <div class="bot d-flex allign-items-center ">
+                <div class="robot d-flex allign-items-center">
+                    <img height="30px" src="c:\Users\bhara\Downloads\robot.png">
+                    <div class="kshiti">
+                        <div class="textt">
+                            <h3>WELCOME to Kshiti</h3>
+                            <h4>Here we learn lessons , make choices to make the world a better place.</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" zig d-flex justify-content-bet just">
+                <div class="box">
+                    <img src="c:\Users\bhara\Downloads\brain.png">
+                    <div class="bloo"><img src="./css/brainn.png"></div>
+                    <h3>Learn</h3>
+                    <p>Interactive, bite-sized lessons with XP rewards, progress tracking, and engaging mini-quizzes that make environmental education fun and memorable.</p>  
+                </div>
+                <div class="box">
+                    <img src="c:\Users\bhara\Downloads\brain.png">
+                    <div class="bloo"><img src="./css/act.png"></div>
+                    <h3>Act</h3>
+                    <p>Real-world eco-challenges with photo verification, community sharing, and impact tracking to turn learning into meaningful action.</p>
+                </div>
+                <div class="box">
+                    <img src="c:\Users\bhara\Downloads\brain.png">
+                    <div class="bloo"><img src="./css/build.png"></div>
+                    <h3>Build</h3>
+                    <p>Collaborative virtual eco-city that grows as your community earns points, unlocking new sustainable infrastructure and achievements.</p>
+                </div>
+            </div>
+
+            <div class="d-flex">
+                <div class="boxone">
+                    <img src="./css/earth.png">
+                    <div>
+                        <h2 style="margin-top: -5px;">Environmental Education</h2>
+                        <div class="geetha"></div>
+                        <ul>
+                            <li>Learning about ecosystems, resources, and pollution</li>
+                            <li>Practicing eco-friendly habits (reduce, reuse, recycle).</li>
+                            <li>Linking human needs with resource protection.</li>
+                            <li>Encourages local people to join in eco-projects and decision-making</li>
+                            <li>Connecting local issues with global challenges</li>
+                            <li>Teaches how to respond to floods, droughts, and cyclones.</li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mbo"></div>
+    <div class="mg"></div>
+    <div class="secondary-navbar"></div>
+    <div>
+      <!-- <button  style="padding:10px 20px; background-color:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer;"> -->
+    Sign Up
+  </button>
+
+  <!-- Modal Background -->
+  <div id="signupModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center;">
+    
+    <!-- Modal Box -->
+    <div style="background:rgb(224, 224, 223); padding:20px; border-radius:10px; width:300px; box-shadow:0 0 10px rgba(0,0,0,0.3);">
+      <h2 style="text-align:center; margin-bottom:10px;">Sign Up</h2>
+      <!-- Success Message (Hidden by Default) -->
+
+
+
+      <!-- Signup Form -->
+      <div id="signupForm">
+        <input type="text" name="name" placeholder="Enter Full Name" required
+          style="width:100%; padding:8px; margin:5px 0; border:1px solid  #2b2f07; border-radius:5px;"><br>
+
+        <select name="role" required
+          style="width:100%; padding:8px; margin:5px 0; border:1px solid  #2b2f07; border-radius:5px;">
+          <option value="">Select Role</option>
+          <option value="user">User</option>
+          <option value="administrative">Administrative</option>
+          <option value="institution">Institution</option>
+        </select><br>
+
+        <input type="text" name="username" placeholder="Enter Username" required
+          style="width:100%; padding:8px; margin:5px 0; border:1px solid #2b2f07 ; border-radius:5px;"><br>
+
+        <input type="password" name="password" placeholder="Enter Password" required
+          style="width:100%; padding:8px; margin:5px 0; border:1px solid #2b2f07; border-radius:5px;"><br>
+        <button onclick="submit()"
+          style="width:100%; padding:10px; background-color:#0ebb81; color:white; border:none; border-radius:5px; cursor:pointer;">
+          Submit
+        </button>
+      </div>
+
+      <!-- Close Button -->
+      <button onclick="closeModal()" 
+        style="margin-top:10px; width:100%; padding:8px; background-color:#e03a0c; color:white; border:none; border-radius:5px; cursor:pointer;">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <script>
+   function submit() {
+    console.log("submitted");
+    alert("login successfully");
+    closeModal();
+    }   
+    function openModal() {
+      document.getElementById("signupModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("signupModal").style.display = "none";
+    }
+
+    document.getElementById("signupForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(this);
+      const data = {
+        name: formData.get("name"),
+        role: formData.get("role"),
+        username: formData.get("username"),
+        password: formData.get("password"),
+      };
+
+      // ✅ Send data to PHP backend
+      const response = await fetch("http://localhost/your-folder/signup.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      alert(result.message);
+      closeModal(); // Close modal after signup
+    });
+  </script>
+  </div>
+
+
+
+
+  <div>
+     
+
+  <!-- Practice Modal -->
+  <div id="practiceModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(20, 1, 1, 0.5); justify-content:center; align-items:center; z-index:1000;">
+    
+    <!-- Modal Box -->
+    <div style="background:rgb(88, 209, 94); padding:20px; border-radius:10px; width:690px; height:70%; overflow-y:auto; box-shadow:0 0 15px rgba(0,0,0,0.4); text-align:center;">
+      <button onclick="closePracticeModal()" 
+        style="float:right; background:#e03a0c; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">
+        ✖
+      </button>
+       <h2 style="color: rgb(68, 68, 206);">♻️ Waste Management Practice</h2>
+  
+  <!-- Question Box -->
+  <div id="questionBox" style="display:flex;background-color: rgb(238, 246, 205);align-items: center; padding:20px; border-radius:10px;margin-left:auto;margin-right: auto; width:600px;height: 300px; box-shadow:0 0 10px rgba(0,0,0,0.3); text-align:center;">
+    <div style="margin-left: auto;margin-right: auto;"><p id="questionText" style="font-weight:bold;"></p>
+    <div id="options" style="margin-top:10px;"></div></div>
+  </div>
+
+  <!-- Animation (hidden initially) -->
+  <div id="animationBox" style="display:none; margin-top:20px; font-size:22px; color:rgb(229, 234, 229); font-weight:bold;">
+    ✅ Correct! Great Job!
+  </div>
+
+
+ 
+
+      <!-- Progress -->
+      <p id="progressText" style="font-weight:bold; margin:5px 0;">Question 1 / 10</p>
+
+      <!-- Question Box -->
+      <div id="questionBox">
+        <p id="questionText" style="font-weight:bold;"></p>
+        <div id="options" style="display:block;margin:10px; "></div>
+      </div>
+
+      <!-- Animation -->
+      <div id="animationBox" style="display:none; margin-top:20px; font-size:22px; color:green; font-weight:bold;">
+        ✅ Correct! Great Job!
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // QUESTIONS
+    const questions = [
+      { q: "Which is the best way to manage kitchen waste?", options: ["Burning", "Composting", "Throwing in Drain", "Dumping in Landfill"], answer: "Composting" },
+      { q: "Which color bin is used for wet waste in India?", options: ["Blue", "Green", "Red", "Yellow"], answer: "Green" },
+      { q: "Plastic waste should be?", options: ["Burnt", "Reused or Recycled", "Thrown in Open", "Buried in Soil"], answer: "Reused or Recycled" },
+      { q: "Biomedical waste is disposed in which bin?", options: ["Red", "Blue", "Black", "Green"], answer: "Red" },
+      { q: "Segregation of waste means?", options: ["Mixing all waste", "Separating waste into categories", "Throwing waste outside", "Burning waste"], answer: "Separating waste into categories" },
+      { q: "E-waste includes?", options: ["Plastic Bottles", "Old Computers & Mobiles", "Vegetable Peels", "Food Waste"], answer: "Old Computers & Mobiles" },
+      { q: "Reduce, Reuse, Recycle are called?", options: ["3 Rs of Waste Management", "Pollution Rules", "Water Cycle", "Forest Laws"], answer: "3 Rs of Waste Management" },
+      { q: "Best way to dispose garden waste?", options: ["Burning", "Landfilling", "Composting", "Throwing in Water"], answer: "Composting" },
+      { q: "Which waste can be composted?", options: ["Plastic Bag", "Banana Peel", "Metal Can", "Glass Bottle"], answer: "Banana Peel" },
+      { q: "Incineration is used to?", options: ["Recycle Waste", "Burn Hazardous Waste Safely", "Collect Waste", "Make Compost"], answer: "Burn Hazardous Waste Safely" }
+    ];
+
+    let currentIndex = 0;
+
+    function openPracticeModal() {
+      document.getElementById("practiceModal").style.display = "flex";
+      loadQuestion();
+    }
+
+    function closePracticeModal() {
+      document.getElementById("practiceModal").style.display = "none";
+      currentIndex = 0;
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      document.getElementById("questionText").textContent = q.q;
+      document.getElementById("progressText").textContent = `Question ${currentIndex + 1} / ${questions.length}`;
+      
+      const optionsDiv = document.getElementById("options");
+      // optionsDiv.style.display="block";
+      optionsDiv.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.textContent = option;
+        btn.style.margin = "5px";
+        btn.style.padding = "8px 12px";
+        btn.style.border = "1px solid #333";
+        btn.style.borderRadius = "5px";
+        btn.style.cursor = "pointer";
+        btn.onclick = () => checkAnswer(option);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const q = questions[currentIndex];
+      if (selected === q.answer) {
+        showAnimation();
+        currentIndex++;
+        if (currentIndex < questions.length) {
+          setTimeout(loadQuestion, 1500);
+        } else {
+          setTimeout(() => {
+            document.getElementById("questionBox").innerHTML = "<h3>🎉 You completed all 10 questions on Waste Management!</h3>";
+            document.getElementById("progressText").textContent = "✅ Quiz Completed!";
+          }, 1500);
+        }
+      } else {
+        alert("❌ Wrong Answer! Try Again.");
+      }
+    }
+
+    function showAnimation() {
+      const animation = document.getElementById("animationBox");
+      animation.style.display = "block";
+      animation.style.opacity = "1";
+      animation.style.transition = "opacity 1s ease-in-out";
+
+      setTimeout(() => {
+        animation.style.opacity = "0";
+        setTimeout(() => {
+          animation.style.display = "none";
+        }, 500);
+      }, 1000);
+    }
+  </script>
+
+  </div>
+
+
+</body>
+</html>
