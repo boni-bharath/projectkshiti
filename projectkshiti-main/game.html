@@ -170,9 +170,11 @@
         let player = {
             x: 50,
             y: 300,
-            width: 60,            // increased sprite display size (was 64)
-            height: 120,          // increased sprite display size (was 96)
-            speed: 3.5,
+               width:75,      // increased sprite display size (was 64)
+            height: 125,          // increased sprite display size (was 96)
+            baseWidth: 75,
+            baseHeight: 125,
+            speed: 3.4,
             jumping: false,
             doubleJumpAvailable: true,
             jumpPower: 12,
@@ -185,9 +187,127 @@
             lastDodgeTime: 0,
             lastPushTime: 0,
             lastJumpOnBotTime: 0,
-            invulnerable: false
+            invulnerable: false,
+            sizeLocked: false
         };
+        // Make width/height constant at runtime by binding to baseWidth/baseHeight
+        Object.defineProperty(player, 'width', {
+            configurable: false,
+            enumerable: true,
+            get() { return player.baseWidth; },
+            set(_) { /* ignore writes to keep size constant */ }
+        });
+        Object.defineProperty(player, 'height', {
+            configurable: false,
+            enumerable: true,
+            get() { return player.baseHeight; },
+            set(_) { /* ignore writes to keep size constant */ }
+        });
         let seeds = 0;
+        // Celebration star particles when a question is solved
+        let starParticles = [];
+        // Audio: simple synthesized sounds for shooting and bot kill (no external assets)
+        let audioCtx = null;
+        function ensureAudio() {
+            if (!audioCtx) {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (AC) audioCtx = new AC();
+            }
+        }
+        // Warm up audio on first user interaction to satisfy autoplay policies
+        document.addEventListener('keydown', () => { ensureAudio(); }, { once: true });
+        function playShootSound() {
+            ensureAudio(); if (!audioCtx) return;
+            const ctx = audioCtx;
+            const t = ctx.currentTime;
+            // PEW: bright laser sweep with a short transient click
+            // Use a mild compressor to prevent clipping at higher volumes
+            const comp = ctx.createDynamicsCompressor();
+            comp.threshold.setValueAtTime(-18, t);
+            comp.knee.setValueAtTime(30, t);
+            comp.ratio.setValueAtTime(12, t);
+            comp.attack.setValueAtTime(0.003, t);
+            comp.release.setValueAtTime(0.1, t);
+            const pew = ctx.createOscillator();
+            const pewGain = ctx.createGain();
+            pew.type = 'triangle';
+            pew.frequency.setValueAtTime(1800, t);
+            pew.frequency.exponentialRampToValueAtTime(600, t + 0.18);
+            pewGain.gain.setValueAtTime(0.55, t);
+            pewGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+            // Add a quiet square harmonic for extra bite
+            const harm = ctx.createOscillator();
+            const harmGain = ctx.createGain();
+            harm.type = 'square';
+            harm.frequency.setValueAtTime(900, t);
+            harm.frequency.exponentialRampToValueAtTime(300, t + 0.18);
+            harmGain.gain.setValueAtTime(0.22, t);
+            harmGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+            // Short click transient
+            const click = ctx.createOscillator();
+            const clickGain = ctx.createGain();
+            click.type = 'square';
+            click.frequency.setValueAtTime(2200, t);
+            clickGain.gain.setValueAtTime(0.26, t);
+            clickGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+            // Post-compressor gain to raise overall loudness (hotter)
+            const out = ctx.createGain();
+            out.gain.setValueAtTime(1.6, t);
+            comp.connect(out).connect(ctx.destination);
+            pew.connect(pewGain).connect(comp);
+            harm.connect(harmGain).connect(comp);
+            click.connect(clickGain).connect(comp);
+            pew.start(t);
+            harm.start(t);
+            click.start(t);
+            pew.stop(t + 0.2);
+            harm.stop(t + 0.18);
+            click.stop(t + 0.05);
+        }
+        function playKillSound() {
+            ensureAudio(); if (!audioCtx) return;
+            const ctx = audioCtx;
+            const t = ctx.currentTime;
+            // Low thump + slight noise for a cleaner impact feel
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(200, t);
+            osc.frequency.exponentialRampToValueAtTime(70, t + 0.22);
+            gain.gain.setValueAtTime(0.22, t);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.26);
+            const lp = ctx.createBiquadFilter();
+            lp.type = 'lowpass';
+            lp.frequency.setValueAtTime(300, t);
+            osc.connect(lp).connect(gain).connect(ctx.destination);
+            osc.start(t);
+            osc.stop(t + 0.26);
+        }
+        // Footstep sound: short soft thump with slight high click
+        function playStepSound() {
+            ensureAudio(); if (!audioCtx) return;
+            const ctx = audioCtx;
+            const t = ctx.currentTime;
+            const thump = ctx.createOscillator();
+            const thumpGain = ctx.createGain();
+            thump.type = 'sine';
+            thump.frequency.setValueAtTime(180, t);
+            thump.frequency.exponentialRampToValueAtTime(120, t + 0.08);
+            thumpGain.gain.setValueAtTime(0.12, t);
+            thumpGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.10);
+            thump.connect(thumpGain).connect(ctx.destination);
+            thump.start(t);
+            thump.stop(t + 0.11);
+            const click = ctx.createOscillator();
+            const clickGain = ctx.createGain();
+            click.type = 'square';
+            click.frequency.setValueAtTime(1200, t);
+            clickGain.gain.setValueAtTime(0.05, t);
+            clickGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.03);
+            click.connect(clickGain).connect(ctx.destination);
+            click.start(t);
+            click.stop(t + 0.03);
+        }
         let solvedProblems = new Set();
         let currentProblem = null;
         let cameraX = 0;
@@ -466,13 +586,10 @@
         }
 
         function resizePlayerForSprite() {
-            // Use run size if available, else idle
-            const base = sprite.loaded.run ? sprite.animations.run : sprite.animations.idle;
-            const fw = base.frameWidth || (base.image.naturalWidth && base.frames ? Math.round(base.image.naturalWidth / base.frames) : 64);
-            const fh = base.frameHeight || base.image.naturalHeight || 96;
-            const targetH = 128; // display height
-            player.height = targetH;
-            player.width = Math.max(32, Math.round(targetH * (fw / fh)));
+            // Keep the player's display size constant once set
+            if (player.sizeLocked) return;
+            // Do not change the initial width/height specified in player; just lock
+            player.sizeLocked = true;
         }
 
         function onSpriteLoaded(kind) {
@@ -759,6 +876,9 @@
                 if (player.health <= 0) gameOver.style.display = 'flex';
                 return;
             }
+            // Hard-lock player sprite size every frame to avoid animation-induced resizing
+            if (player.width !== player.baseWidth) player.width = player.baseWidth;
+            if (player.height !== player.baseHeight) player.height = player.baseHeight;
 
             // Compute a single delta time for this frame to keep animations in sync
             const nowFrame = performance.now();
@@ -788,6 +908,7 @@
                     speed: player.facingRight ? 8 : -8
                 });
                 lastShotTime = Date.now();
+                playShootSound();
             }
             if (keys['d'] && !player.isDodging && Date.now() - player.lastDodgeTime > dodgeCooldown && !currentProblem) {
                 player.isDodging = true;
@@ -955,6 +1076,7 @@
                         // Consume weapon if a bot is destroyed by projectile
                         if (b.health <= 0 && player.hasWeapon) {
                             player.hasWeapon = false;
+                            playKillSound();
                         }
                         return false;
                     }
@@ -977,6 +1099,17 @@
                 for (let x = offsetX; x < canvas.width; x += bgW) {
                     ctx.drawImage(img, 0, 0, img.width, img.height, x, 0, bgW, canvas.height);
                 }
+                // Title over the background image
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                ctx.font = 'bold 36px Arial';
+                // Light white fill, no border
+                ctx.fillStyle = 'rgba(255,255,255,0.70)';
+                const titleX = Math.floor(canvas.width / 2);
+                const titleY = 28;
+                ctx.fillText('WASTE MANAGEMENT', titleX, titleY);
+                ctx.restore();
             } else {
                 // Fallback solid background color while loading
                 ctx.fillStyle = '#4a5568';
@@ -1067,17 +1200,17 @@
                         // Match size to obstacle 1 (plastic)
                         const first = problems.find(pp => pp.id === 'plastic_waste');
                         if (first) {
-                            // Reduce to 90% of plastic pile size
+                            // Reduce to 90% of plastic pile size and anchor to ground
                             p.width = Math.round(first.width * 0.9);
                             p.height = Math.round(first.height * 0.9);
-                            // Y position is handled in the game loop
+                            p.y = groundY - p.height;
                         }
                         let drawW = p.width;
                         let drawH = Math.round(drawW / aspect);
                         if (drawH > p.height) { drawH = p.height; drawW = Math.round(drawH * aspect); }
                         const destX = Math.round(p.x + (p.width - drawW) / 2);
-                        const groundOverlap = 10;
-                        const destY = p.y + (p.height - drawH) + groundOverlap;
+                        const groundOverlap = 18; // food sprite needs a bit more overlap to avoid floating
+                        const destY = groundY - drawH + groundOverlap;
                         ctx.drawImage(img, srcX, srcY, srcW, srcH, destX, destY, drawW, drawH);
                     } else if (p.id === 'e_waste' && obstacleImages.e_waste.loaded) {
                         const img = obstacleImages.e_waste.image;
@@ -1091,7 +1224,7 @@
                         if (first) {
                             p.width = Math.round(first.width * 0.75);
                             p.height = Math.round(first.height * 0.75);
-                            // Y position is handled in the game loop
+                            p.y = groundY - p.height;
                         }
                         let drawW = p.width;
                         let drawH = Math.round(drawW / aspect);
@@ -1111,14 +1244,14 @@
                         if (first) {
                             p.width = Math.round(first.width * 0.9);
                             p.height = Math.round(first.height * 0.9);
-                            // Y position is handled in the game loop
+                            p.y = groundY - p.height;
                         }
                         let drawW = p.width;
                         let drawH = Math.round(drawW / aspect);
                         if (drawH > p.height) { drawH = p.height; drawW = Math.round(drawH * aspect); }
                         const destX = Math.round(p.x + (p.width - drawW) / 2);
                         const groundOverlap = 10;
-                        const destY = p.y + (p.height - drawH) + groundOverlap;
+                        const destY = groundY - drawH + groundOverlap;
                         ctx.drawImage(img, srcX, srcY, srcW, srcH, destX, destY, drawW, drawH);
                     } else if (p.id === 'paper_waste' && obstacleImages.paper_waste.loaded) {
                         const img = obstacleImages.paper_waste.image;
@@ -1166,6 +1299,10 @@
             if (player.animation !== prevAnim) {
                 sprite.frameIndex = 0;
                 sprite.frameTimer = 0;
+                // Start simple footstep cadence when entering run
+                if (player.animation === 'run') {
+                    playStepSound();
+                }
             }
 
             // Draw player sprite (fallback to rect if sprite not ready)
@@ -1185,6 +1322,10 @@
                     if (sprite.frameTimer >= sprite.frameInterval) {
                         sprite.frameTimer = 0;
                         sprite.frameIndex = (sprite.frameIndex + 1) % Math.max(1, anim.frames);
+                        // Trigger footstep every other frame during run to avoid spam
+                        if (player.animation === 'run' && (sprite.frameIndex % 2 === 0)) {
+                            playStepSound();
+                        }
                     }
                 }
                 // Determine source frame size. Prefer explicit overrides if provided.
@@ -1235,6 +1376,41 @@
                 ctx.fillStyle = 'white';
                 ctx.fillText('Prakruti', player.x, player.y - 10);
             }
+            // Update and draw celebration stars above the player's head
+            if (starParticles.length) {
+                const next = [];
+                for (let s of starParticles) {
+                    // motion
+                    s.vx *= 0.99;
+                    s.vy -= 0.02;
+                    s.x += s.vx;
+                    s.y += s.vy;
+                    s.life -= dt;
+                    s.alpha = Math.max(0, s.life / s.maxLife);
+                    // draw
+                    const cx = Math.round(s.x);
+                    const cy = Math.round(s.y);
+                    const r = s.size;
+                    ctx.save();
+                    ctx.globalAlpha = s.alpha;
+                    ctx.fillStyle = s.color;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy - r);
+                    ctx.lineTo(cx + r * 0.6, cy - r * 0.2);
+                    ctx.lineTo(cx + r, cy);
+                    ctx.lineTo(cx + r * 0.6, cy + r * 0.2);
+                    ctx.lineTo(cx, cy + r);
+                    ctx.lineTo(cx - r * 0.6, cy + r * 0.2);
+                    ctx.lineTo(cx - r, cy);
+                    ctx.lineTo(cx - r * 0.6, cy - r * 0.2);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.restore();
+                    if (s.life > 0) next.push(s);
+                }
+                starParticles = next;
+            }
+
             projectiles.forEach(p => {
                 ctx.fillStyle = 'red';
                 ctx.fillRect(p.x, p.y, p.width, p.height);
@@ -1288,6 +1464,7 @@
                 if (isCorrect) {
                     solvedProblems.add(problem.id);
                     seeds += 1;
+                    spawnCelebrationStars();
                     closeInteractionBox();
                     checkLevelComplete();
                 } else {
@@ -1300,6 +1477,7 @@
             if (score > 0) {
                 solvedProblems.add(problem.id);
                 seeds += score;
+                spawnCelebrationStars();
                 closeInteractionBox();
                 checkLevelComplete();
             } else {
@@ -1320,9 +1498,31 @@
                 solvedProblems.add(problem.id);
                 seeds += 1;
                 setTimeout(() => {
+                    spawnCelebrationStars();
                     closeInteractionBox();
                     checkLevelComplete();
                 }, 2000);
+            }
+        }
+
+        // Spawn a brief burst of stars above the player's head
+        function spawnCelebrationStars() {
+            const centerX = player.x + player.width / 2;
+            const headY = player.y - 10; // just above the head
+            for (let i = 0; i < 14; i++) {
+                const speed = 0.8 + Math.random() * 1.2;
+                const angle = (-Math.PI / 2) + (Math.random() - 0.5) * (Math.PI / 3); // mostly upward
+                starParticles.push({
+                    x: centerX + (Math.random() - 0.5) * 10,
+                    y: headY + (Math.random() - 0.5) * 6,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: 10 + Math.random() * 4,
+                    color: Math.random() < 0.5 ? '#ffd700' : '#fff799',
+                    life: 600 + Math.random() * 400,
+                    maxLife: 1000,
+                    alpha: 1
+                });
             }
         }
 
